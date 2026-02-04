@@ -16,10 +16,9 @@
             /* ==========================================
                DARK CHIC SETTINGS
                ========================================== */
-            --primary-color: #ffffff; /* 文字は白 */
+            --primary-color: #ffffff; 
             --text-body: #dddddd;     
             
-            /* ダーク基調 */
             --accent-main: #ffffff;   
             --accent-sub: #888888;    
             
@@ -27,7 +26,7 @@
             --point-color: #f46cbc; 
             
             --bg-color: #000000;
-            --glass-bg: rgba(25, 25, 25, 0.7);
+            --glass-bg: rgba(25, 25, 25, 0.75);
         }
 
         body {
@@ -340,7 +339,6 @@
         <section id="works" class="slider-section">
             <h2 class="section-title">My Favorites</h2>
             <div class="slider-wrapper" id="sliderWrapper">
-                <!-- Slide 1 -->
                 <div class="slide">
                     <div class="work-card">
                         <div class="work-info">
@@ -352,7 +350,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Slide 2 -->
                 <div class="slide">
                     <div class="work-card">
                         <div class="work-info">
@@ -362,7 +359,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Slide 3 -->
                 <div class="slide">
                     <div class="work-card">
                         <div class="work-info">
@@ -443,9 +439,10 @@
                     vec2 uv = gl_FragCoord.xy / u_res;
                     float dist = distance(uv, u_mouse);
                     
-                    // 広がりを大きく(10.0), 影響を強く(0.5)
+                    // 広がりを大きく(10.0)
                     float strength = exp(-dist * 10.0); 
                     
+                    // ゆったりした動きのための歪み
                     vec2 distortion = vec2(
                         sin(uv.y * 5.0 + u_time * 0.5), 
                         cos(uv.x * 5.0 + u_time * 0.5)
@@ -453,14 +450,14 @@
 
                     vec4 prev = texture2D(u_buffer, uv + distortion + (strength * 0.003));
                     
-                    // 背景を漆黒に
+                    // 背景は漆黒
                     vec3 baseCol = vec3(0.0, 0.0, 0.0); 
                     
-                    // アクセントカラーが暗闇で光るように調整
-                    vec3 col = mix(baseCol, u_color_point, strength * 0.6);
+                    // 暗闇でネオンのように光る調整
+                    vec3 col = mix(baseCol, u_color_point, strength * 0.65);
                     
                     // 残像をゆったり残す
-                    gl_FragColor = vec4(mix(prev.rgb * 0.992, col, strength * 0.25), 1.0);
+                    gl_FragColor = vec4(mix(prev.rgb * 0.993, col, strength * 0.25), 1.0);
                 }
             `;
 
@@ -486,8 +483,8 @@
                     uniform sampler2D u_tex;
                     void main(){ 
                         vec4 c = texture2D(u_tex, gl_FragCoord.xy / vec2(${window.innerWidth}.0, ${window.innerHeight}.0));
-                        // ダークモード用に色の出方を調整（加算っぽく光らせる）
-                        gl_FragColor = vec4(c.rgb * 1.5, 1.0); 
+                        // ダーク背景での輝きを強調
+                        gl_FragColor = vec4(c.rgb * 1.8, 1.0); 
                     }
                 `
             });
