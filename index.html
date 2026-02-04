@@ -13,38 +13,20 @@
 
     <style>
         :root {
-            /* ==========================================
-               TRUE BLACK CHIC SETTINGS
-               ========================================== */
             --primary-color: #ffffff; 
-            --text-body: #dddddd;     
-            
-            --accent-main: #ffffff;   
-            --accent-sub: #888888;    
-            
-            /* アクセントカラー：マゼンタピンク */
             --point-color: #f46cbc; 
-            
-            /* 完全な漆黒 */
             --bg-color: #000000;
-            --card-bg: #000000;
         }
 
-        /* ブラウザ全体を漆黒に */
         html, body {
             background-color: #000000 !important;
             margin: 0;
             padding: 0;
             font-family: 'Zen Kaku Gothic New', sans-serif;
             color: var(--primary-color);
-            overflow: hidden;
-            height: 100vh;
+            overflow-x: hidden;
             line-height: 1.8;
-        }
-
-        body.loaded {
-            overflow-y: auto; 
-            height: auto;
+            scroll-behavior: smooth;
         }
 
         /* Loading Screen */
@@ -63,11 +45,7 @@
             transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        #loading-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
+        #loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
         .loading-logo {
             font-family: 'Playfair Display', serif;
@@ -78,19 +56,8 @@
             letter-spacing: 0.1em;
         }
 
-        .loading-bar-container {
-            width: 160px;
-            height: 1px;
-            background: #111;
-            overflow: hidden;
-        }
-        
-        .loading-bar {
-            height: 100%;
-            width: 0%;
-            background: var(--point-color);
-            transition: width 0.1s linear;
-        }
+        .loading-bar-container { width: 160px; height: 1px; background: #111; overflow: hidden; }
+        .loading-bar { height: 100%; width: 0%; background: var(--point-color); transition: width 0.1s linear; }
 
         /* Background Canvas */
         #canvas-container {
@@ -103,51 +70,7 @@
             background-color: #000;
         }
 
-        /* Layout */
-        .page-container {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            opacity: 0;
-            transition: opacity 1.5s ease;
-            background: transparent;
-        }
-        
-        .page-container.visible {
-            opacity: 1;
-        }
-
-        section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 6rem 2rem;
-            box-sizing: border-box;
-            background: transparent;
-        }
-
-        .section-title {
-            font-family: 'Italiana', serif;
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            margin-bottom: 4rem;
-            color: var(--accent-main);
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 1px;
-            background: var(--point-color);
-        }
-        
+        /* Nav */
         nav {
             position: fixed;
             top: 0;
@@ -157,183 +80,212 @@
             display: flex;
             gap: 2rem;
         }
-
         .nav-item {
             text-decoration: none;
             color: var(--primary-color);
             font-family: 'Italiana', serif;
             font-size: 1rem;
-            transition: all 0.3s;
-            font-weight: 500;
+            transition: 0.3s;
             letter-spacing: 0.1em;
         }
         .nav-item:hover { color: var(--point-color); }
 
-        /* Hero */
+        /* Hero & Header */
         .hero-section {
-            height: 100vh;
-            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+            padding-top: 5rem;
         }
 
+        .hero-title-area {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
         .hero-logo {
             font-family: 'Playfair Display', serif;
             font-style: italic;
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: var(--point-color);
-            margin-bottom: 1.5rem;
+            letter-spacing: 0.4em;
+            margin-bottom: 1rem;
             display: block;
-            letter-spacing: 0.2em;
         }
-
         .hero-title {
             font-family: 'Italiana', serif;
-            font-size: clamp(4.5rem, 12vw, 9rem);
-            line-height: 0.9;
-            margin-bottom: 2.5rem;
-            color: var(--accent-main);
+            font-size: clamp(3rem, 8vw, 6rem);
+            margin: 0;
             font-weight: 400;
         }
 
-        .hero-desc {
-            font-size: 1rem;
-            letter-spacing: 0.3em;
-            color: #888;
-            text-transform: uppercase;
-        }
-
-        /* About Card (Glass -> Solid Black) */
-        .glass-card {
-            background: #000000; /* 漆黒に固定 */
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 0px;
-            padding: 5rem 4rem;
+        /* Top Page Slider (Hero Cards) */
+        .hero-slider-container {
             width: 100%;
-            max-width: 960px;
+            max-width: 1200px;
+            padding: 0 2rem;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .hero-slider-wrapper {
             display: flex;
-            gap: 4rem;
-            align-items: center;
-            box-shadow: 0 40px 100px rgba(0,0,0,1);
+            gap: 2rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 2rem 0;
+            scrollbar-width: none; /* Firefox */
         }
+        .hero-slider-wrapper::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
-        @media (max-width: 768px) {
-            .glass-card { flex-direction: column; text-align: center; padding: 3rem 2rem; }
-        }
-
-        .profile-img-wrapper {
-            flex: 1;
-            overflow: hidden;
-            aspect-ratio: 1;
+        .hero-card {
+            min-width: 320px;
+            flex: 0 0 32%;
             background: #000;
-            border: 1px solid #222;
-        }
-        .profile-img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            filter: grayscale(100%) brightness(0.8); 
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        .profile-img:hover { filter: grayscale(0%) brightness(1); transform: scale(1.05); }
-
-        .profile-text { flex: 1.5; }
-        .profile-name { font-family: 'Italiana', serif; font-size: 3.5rem; margin-bottom: 1rem; color: #fff; }
-        .profile-role { color: var(--point-color); font-weight: 600; margin-bottom: 1.5rem; display: block; letter-spacing: 0.1em; }
-
-        /* Slider */
-        .slider-section { 
-            padding: 8rem 0; 
-            overflow: hidden; 
-        }
-        .slider-wrapper { display: flex; transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
-        .slide { min-width: 100%; display: flex; justify-content: center; padding: 0 2rem; box-sizing: border-box; }
-        
-        .work-card {
-            background: #000000;
-            padding: 0;
-            max-width: 900px;
-            width: 100%;
-            display: flex;
-            box-shadow: 0 20px 60px rgba(0,0,0,1);
             border: 1px solid rgba(255,255,255,0.1);
+            scroll-snap-align: start;
             overflow: hidden;
+            transition: transform 0.4s ease;
+        }
+        @media (max-width: 900px) {
+            .hero-card { flex: 0 0 80%; }
         }
 
-        .work-img {
-            flex: 1;
-            height: 400px;
+        .hero-card-img {
+            width: 100%;
+            aspect-ratio: 4/3;
             overflow: hidden;
-            background: #000;
+            background: #111;
         }
-        .work-img img {
+        .hero-card-img img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             filter: grayscale(100%) brightness(0.6);
-            transition: 0.5s;
+            transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .work-card:hover .work-img img { filter: grayscale(0%) brightness(1); }
+        .hero-card:hover .hero-card-img img {
+            filter: grayscale(0%) brightness(1);
+            transform: scale(1.05);
+        }
 
-        .work-info {
-            flex: 1;
-            padding: 3.5rem;
+        .hero-card-content {
+            padding: 2rem;
+        }
+        .hero-card-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+        .hero-card-content p {
+            font-size: 0.9rem;
+            color: #888;
+            white-space: pre-line;
+            margin: 0;
+        }
+
+        /* Section Commons */
+        section {
+            padding: 10rem 2rem;
+            position: relative;
+            z-index: 10;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            align-items: center;
+        }
+        .section-title {
+            font-family: 'Italiana', serif;
+            font-size: 3rem;
+            margin-bottom: 5rem;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px; left: 50%;
+            transform: translateX(-50%);
+            width: 30px; height: 1px;
+            background: var(--point-color);
         }
 
-        @media (max-width: 768px) { 
-            .work-card { flex-direction: column; } 
-            .work-img { height: 250px; }
+        /* About Section (4.jpg use) */
+        .about-card {
+            background: #000;
+            border: 1px solid rgba(255,255,255,0.1);
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            padding: 4rem;
         }
-
-        .work-info h3 { font-size: 1.6rem; margin-bottom: 1.5rem; color: #fff; font-family: 'Playfair Display', serif; line-height: 1.4; }
-        .work-info p { color: #888; font-size: 0.95rem; white-space: pre-line; margin: 0; }
-
-        .slider-controls { display: flex; justify-content: center; gap: 4rem; margin-top: 4rem; }
-        .nav-btn {
-            width: 40px; height: 40px;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-            transition: all 0.3s; background: transparent; font-family: 'Italiana', serif;
-            font-size: 1.5rem; color: #444; border: none;
+        @media (max-width: 768px) {
+            .about-card { flex-direction: column; padding: 2rem; text-align: center; }
         }
-        .nav-btn:hover { color: var(--point-color); transform: scale(1.2); }
+        .about-img-box {
+            flex: 1;
+            aspect-ratio: 1;
+            overflow: hidden;
+            background: #111;
+        }
+        .about-img-box img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: grayscale(100%) brightness(0.7);
+            transition: 0.6s;
+        }
+        .about-card:hover .about-img-box img { filter: grayscale(0%) brightness(1); }
 
-        /* Contact Form */
-        .contact-form-wrapper {
-            background: #000000;
+        .about-info { flex: 1.5; }
+        .about-info h3 { font-family: 'Italiana', serif; font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .about-info span { color: var(--point-color); display: block; margin-bottom: 1.5rem; letter-spacing: 0.2em; }
+
+        /* Contact */
+        .contact-box {
+            background: #000;
+            border: 1px solid rgba(255,255,255,0.1);
             padding: 4rem;
             width: 100%;
             max-width: 600px;
-            box-shadow: 0 40px 100px rgba(0,0,0,1);
-            border: 1px solid rgba(255,255,255,0.1);
         }
-
-        .form-control {
-            width: 100%; padding: 1.2rem; margin-bottom: 2rem;
-            border: none; border-bottom: 1px solid #222;
+        .input-line {
+            width: 100%;
             background: transparent;
+            border: none;
+            border-bottom: 1px solid #333;
             color: #fff;
-            font-family: inherit; font-size: 1rem; outline: none; transition: border-color 0.3s;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            font-family: inherit;
+            outline: none;
         }
-        .form-control:focus { border-bottom-color: var(--point-color); }
-
+        .input-line:focus { border-bottom-color: var(--point-color); }
         .submit-btn {
-            width: 100%; padding: 1.2rem; border: none;
+            width: 100%;
+            padding: 1.2rem;
             background: #fff;
-            color: #000; font-family: 'Italiana', serif; font-size: 1.2rem;
-            cursor: pointer; transition: all 0.4s; letter-spacing: 0.2em;
+            color: #000;
+            border: none;
+            font-family: 'Italiana', serif;
             font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
         }
         .submit-btn:hover { background: var(--point-color); color: #fff; }
 
-        footer { padding: 6rem 4rem; text-align: center; font-family: 'Italiana', serif; color: #222; letter-spacing: 0.1em; }
-
-        /* スクロールバーの非表示（シックにするため） */
-        ::-webkit-scrollbar { width: 0px; }
-
+        footer {
+            padding: 4rem;
+            text-align: center;
+            color: #222;
+            font-family: 'Italiana', serif;
+            position: relative;
+            z-index: 10;
+        }
     </style>
 </head>
-<body class="bg-black">
+<body>
 
     <div id="loading-screen">
         <div class="loading-logo">Nico</div>
@@ -342,134 +294,110 @@
 
     <div id="canvas-container"></div>
 
-    <div class="page-container">
-        <nav>
-            <a href="#about" class="nav-item">About</a>
-            <a href="#works" class="nav-item">Favorites</a>
-            <a href="#contact" class="nav-item">Contact</a>
-        </nav>
+    <nav>
+        <a href="#about" class="nav-item">About</a>
+        <a href="#contact" class="nav-item">Contact</a>
+    </nav>
 
-        <section class="hero-section">
-            <div class="hero-content">
-                <span class="hero-logo">PORTFOLIO</span>
-                <h1 class="hero-title">Nico</h1>
-                <p class="hero-desc">AIに恋する主婦 / 3度の飯よりAIが好き</p>
-            </div>
-        </section>
+    <!-- Top Page (Hero + Card Slider) -->
+    <section class="hero-section">
+        <div class="hero-title-area">
+            <span class="hero-logo">PORTFOLIO</span>
+            <h1 class="hero-title">Nico</h1>
+        </div>
 
-        <section id="about">
-            <h2 class="section-title">About Me</h2>
-            <div class="glass-card">
-                <div class="profile-img-wrapper">
-                    <!-- 1.jpg を適用 -->
-                    <img src="1.jpg" alt="Nico Profile" class="profile-img" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800';">
-                </div>
-                <div class="profile-text">
-                    <h3 class="profile-name">Nico</h3>
-                    <span class="profile-role">AIに恋する主婦</span>
-                    <p class="profile-desc">
-                        最新のAIツールを触っているときが一番幸せな時間です。<br>
-                        CursorやClaudeを使って新しいものを作る楽しさを発信しています。
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <section id="works" class="slider-section">
-            <h2 class="section-title">My Favorites</h2>
-            <div class="slider-wrapper" id="sliderWrapper">
-                <!-- Slide 1: 2.jpg -->
-                <div class="slide">
-                    <div class="work-card">
-                        <div class="work-img">
-                            <img src="2.jpg" alt="Favorite 01" onerror="this.src='https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800';">
-                        </div>
-                        <div class="work-info">
-                            <h3>01. AIが楽しすぎて時間が溶ける！</h3>
-                            <p>最近よく使うのは
+        <div class="hero-slider-container">
+            <div class="hero-slider-wrapper">
+                <!-- Card 1 (1.jpg) -->
+                <div class="hero-card">
+                    <div class="hero-card-img">
+                        <img src="1.jpg" alt="Work 01" onerror="this.src='https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800';">
+                    </div>
+                    <div class="hero-card-content">
+                        <h3>1. AIが楽しすぎて時間が溶ける！</h3>
+                        <p>最近よく使うのは
 ・Cursor
 ・Claude Code
 ・Remotion</p>
-                        </div>
                     </div>
                 </div>
-                <!-- Slide 2: 3.jpg -->
-                <div class="slide">
-                    <div class="work-card">
-                        <div class="work-img">
-                            <img src="3.jpg" alt="Favorite 02" onerror="this.src='https://images.unsplash.com/photo-1620712943543-bcc4638d9f80?auto=format&fit=crop&w=800';">
-                        </div>
-                        <div class="work-info">
-                            <h3>02. 推しのセミナー参加</h3>
-                            <p>AI界隈のセミナーに参加するのが大好き。
-いつもどこかのセミナーに神出鬼没です。</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Slide 3: 4.jpg -->
-                <div class="slide">
-                    <div class="work-card">
-                        <div class="work-img">
-                            <img src="4.jpg" alt="Favorite 03" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800';">
-                        </div>
-                        <div class="work-info">
-                            <h3>03. もっと色々出来るようになりたい！</h3>
-                            <p>これから試したいこと
-・OpenClaw
-・AGIへの道</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="slider-controls">
-                <div class="nav-btn" id="prevBtn">PREV</div>
-                <div class="nav-btn" id="nextBtn">NEXT</div>
-            </div>
-        </section>
 
-        <section id="contact">
-            <h2 class="section-title">Contact</h2>
-            <div class="contact-form-wrapper">
-                <input type="text" placeholder="Your Name" class="form-control">
-                <input type="email" placeholder="Email Address" class="form-control">
-                <textarea placeholder="Message" class="form-control" rows="3"></textarea>
-                <button class="submit-btn">SEND MESSAGE</button>
+                <!-- Card 2 (2.jpg) -->
+                <div class="hero-card">
+                    <div class="hero-card-img">
+                        <img src="2.jpg" alt="Work 02" onerror="this.src='https://images.unsplash.com/photo-1620712943543-bcc4638d9f80?auto=format&fit=crop&w=800';">
+                    </div>
+                    <div class="hero-card-content">
+                        <h3>2. 推しのセミナー参加</h3>
+                        <p>AI界隈のセミナーに参加するのが大好き
+いつもどこかのセミナーに神出鬼没</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 (3.jpg) -->
+                <div class="hero-card">
+                    <div class="hero-card-img">
+                        <img src="3.jpg" alt="Work 03" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800';">
+                    </div>
+                    <div class="hero-card-content">
+                        <h3>3. 2026年はこれを極めたい！</h3>
+                        <p>・OpenClaw
+・AGI
+・Raycast
+・GitHub
+・Docker
+・MCP</p>
+                    </div>
+                </div>
             </div>
-            <footer>&copy; 2026 Nico — AI Enthusiast</footer>
-        </section>
-    </div>
+        </div>
+    </section>
+
+    <!-- About Section (4.jpg use) -->
+    <section id="about">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-card">
+            <div class="about-img-box">
+                <img src="4.jpg" alt="Nico Profile" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800';">
+            </div>
+            <div class="about-info">
+                <h3>Nico</h3>
+                <span>AI ENTHUSIAST</span>
+                <p>AIに恋する主婦。3度の飯よりAIが好き。<br>
+                最新のAIツールに触れる喜びを日々探究しています。</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title">Contact</h2>
+        <div class="contact-box">
+            <input type="text" placeholder="Name" class="input-line">
+            <input type="email" placeholder="Email" class="input-line">
+            <textarea placeholder="Message" class="input-line" rows="4"></textarea>
+            <button class="submit-btn">SEND</button>
+        </div>
+    </section>
+
+    <footer>&copy; 2026 Nico — AI Life</footer>
 
     <script>
-        // --- Loading ---
+        // Loading
         window.addEventListener('load', () => {
             const bar = document.getElementById('loading-bar');
             bar.style.width = "100%";
             setTimeout(() => {
                 document.getElementById('loading-screen').classList.add('hidden');
-                document.querySelector('.page-container').classList.add('visible');
-                document.body.classList.add('loaded');
+                document.body.style.overflowY = "auto";
             }, 800);
         });
 
-        // --- Slider ---
-        const wrapper = document.getElementById('sliderWrapper');
-        let index = 0;
-        document.getElementById('nextBtn').onclick = () => {
-            index = (index + 1) % 3;
-            wrapper.style.transform = `translateX(-${index * 100}%)`;
-        };
-        document.getElementById('prevBtn').onclick = () => {
-            index = (index - 1 + 3) % 3;
-            wrapper.style.transform = `translateX(-${index * 100}%)`;
-        };
-
-        // --- Three.js Background Animation (Dark Fluid) ---
+        // Three.js Fluid Background
         let renderer, scene, camera, simMaterial, targetA, targetB, simScene, drawScene;
 
         function initThreeJS() {
             const container = document.getElementById('canvas-container');
             renderer = new THREE.WebGLRenderer({ antialias: false });
-            renderer.setPixelRatio(1);
             renderer.setSize(window.innerWidth, window.innerHeight);
             container.appendChild(renderer.domElement);
 
@@ -485,35 +413,22 @@
                 uniform vec2 u_res;
                 uniform vec2 u_mouse;
                 uniform float u_time;
-                uniform vec3 u_color_point;
-
                 void main() {
                     vec2 uv = gl_FragCoord.xy / u_res;
                     float dist = distance(uv, u_mouse);
-                    float strength = exp(-dist * 15.0); 
-                    
-                    vec2 distortion = vec2(
-                        sin(uv.y * 5.0 + u_time * 0.5), 
-                        cos(uv.x * 5.0 + u_time * 0.5)
-                    ) * 0.001;
-
-                    vec4 prev = texture2D(u_buffer, uv + distortion);
-                    
-                    vec3 col = mix(vec3(0.0), u_color_point, strength * 0.6);
-                    gl_FragColor = vec4(mix(prev.rgb * 0.992, col, strength * 0.15), 1.0);
+                    float strength = exp(-dist * 18.0);
+                    vec4 prev = texture2D(u_buffer, uv + vec2(sin(u_time + uv.y*10.0)*0.0005));
+                    vec3 col = mix(vec3(0.0), vec3(0.95, 0.42, 0.74), strength * 0.4);
+                    gl_FragColor = vec4(mix(prev.rgb * 0.99, col, strength * 0.1), 1.0);
                 }
             `;
-
-            const style = getComputedStyle(document.documentElement);
-            const pointCol = new THREE.Color(style.getPropertyValue('--point-color').trim());
 
             simMaterial = new THREE.ShaderMaterial({
                 uniforms: {
                     u_buffer: { value: null },
                     u_res: { value: size },
                     u_mouse: { value: new THREE.Vector2(-1, -1) },
-                    u_time: { value: 0 },
-                    u_color_point: { value: pointCol }
+                    u_time: { value: 0 }
                 },
                 vertexShader: `void main(){ gl_Position = vec4(position, 1.0); }`,
                 fragmentShader: simFrag
@@ -526,7 +441,7 @@
                     uniform sampler2D u_tex;
                     void main(){ 
                         vec4 c = texture2D(u_tex, gl_FragCoord.xy / vec2(${window.innerWidth}.0, ${window.innerHeight}.0));
-                        gl_FragColor = vec4(c.rgb * 1.8, 1.0); 
+                        gl_FragColor = vec4(c.rgb * 1.5, 1.0); 
                     }
                 `
             });
@@ -534,7 +449,6 @@
             const quad = new THREE.PlaneGeometry(2, 2);
             simScene = new THREE.Scene(); simScene.add(new THREE.Mesh(quad, simMaterial));
             drawScene = new THREE.Scene(); drawScene.add(new THREE.Mesh(quad, drawMaterial));
-
             animate();
         }
 
@@ -555,7 +469,6 @@
         }
 
         initThreeJS();
-        
         window.addEventListener('resize', () => {
             renderer.setSize(window.innerWidth, window.innerHeight);
             targetA.setSize(window.innerWidth, window.innerHeight);
