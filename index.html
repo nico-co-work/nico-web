@@ -203,7 +203,7 @@
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border: 1px solid rgba(0,0,0,0.05);
-            border-radius: 4px; /* シックにするため角丸を抑える */
+            border-radius: 4px;
             padding: 5rem 4rem;
             width: 100%;
             max-width: 960px;
@@ -245,12 +245,13 @@
             gap: 3rem;
             box-shadow: 0 10px 40px rgba(0,0,0,0.04);
             border-left: 2px solid var(--accent-main);
+            text-align: left;
         }
 
         @media (max-width: 600px) { .work-card { flex-direction: column; padding: 2.5rem; } }
 
-        .work-info h3 { font-size: 2rem; margin-bottom: 1.5rem; color: var(--accent-main); font-family: 'Playfair Display', serif; }
-        .work-info p { color: #555; font-size: 1.05rem; }
+        .work-info h3 { font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--accent-main); font-family: 'Playfair Display', serif; line-height: 1.4; }
+        .work-info p { color: #555; font-size: 1.05rem; white-space: pre-line; }
 
         .slider-controls { display: flex; justify-content: center; gap: 4rem; margin-top: 4rem; }
         .nav-btn {
@@ -310,7 +311,7 @@
             <div class="hero-content">
                 <span class="hero-logo">PORTFOLIO</span>
                 <h1 class="hero-title">Nico</h1>
-                <p class="hero-desc">AI Enthusiast / Creative Life</p>
+                <p class="hero-desc">AIに恋する主婦 / 3度の飯よりAIが好き</p>
             </div>
         </section>
 
@@ -318,15 +319,14 @@
             <h2 class="section-title">About Me</h2>
             <div class="glass-card">
                 <div class="profile-img-wrapper">
-                    <!-- 代替画像用プレースホルダー -->
                     <div style="width:100%; height:100%; background: #f0f0f0; display:flex; align-items:center; justify-content:center; color:#999; font-style:italic;">Nico Profile</div>
                 </div>
                 <div class="profile-text">
                     <h3 class="profile-name">Nico</h3>
                     <span class="profile-role">AIに恋する主婦</span>
                     <p class="profile-desc">
-                        3度の飯よりAIが好き。<br>
-                  
+                        最新のAIツールを触っているときが一番幸せな時間です。<br>
+                        CursorやClaudeを使って新しいものを作る楽しさを発信しています。
                     </p>
                 </div>
             </div>
@@ -335,27 +335,36 @@
         <section id="works" class="slider-section">
             <h2 class="section-title">My Favorites</h2>
             <div class="slider-wrapper" id="sliderWrapper">
+                <!-- Slide 1 -->
                 <div class="slide">
                     <div class="work-card">
                         <div class="work-info">
-                            <h3>01. AI Tooling</h3>
-                            <p>Cursor / Claude Code / Remotion<br>日常をコードで彩り、時間が溶けるほど没頭できる最高のパートナーたち。</p>
+                            <h3>01. AIが楽しすぎて時間が溶ける！</h3>
+                            <p>最近よく使うのは
+・Cursor
+・Claude Code
+・Remotion</p>
                         </div>
                     </div>
                 </div>
+                <!-- Slide 2 -->
                 <div class="slide">
                     <div class="work-card">
                         <div class="work-info">
-                            <h3>02. Seminars</h3>
-                            <p>AI界隈の最前線へ。セミナーで見かける、神出鬼没な私の推し活動の記録。</p>
+                            <h3>02. 推しのセミナー参加</h3>
+                            <p>AI界隈のセミナーに参加するのが大好き
+いつもどこかのセミナーに神出鬼没</p>
                         </div>
                     </div>
                 </div>
+                <!-- Slide 3 -->
                 <div class="slide">
                     <div class="work-card">
                         <div class="work-info">
-                            <h3>03. Next Step</h3>
-                            <p>OpenClaw / AGI.<br>未知の領域へ踏み込む、これからの挑戦リスト。</p>
+                            <h3>03. もっと色々出来るようになりたい！</h3>
+                            <p>これから試したいこと
+・OpenClaw
+・AGI</p>
                         </div>
                     </div>
                 </div>
@@ -374,7 +383,7 @@
                 <textarea placeholder="Message" class="form-control" rows="3"></textarea>
                 <button class="submit-btn">SEND MESSAGE</button>
             </div>
-            <footer>&copy; 2026 Nico — Digital Identity</footer>
+            <footer>&copy; 2026 Nico — AI Enthusiast</footer>
         </section>
     </div>
 
@@ -402,8 +411,8 @@
             wrapper.style.transform = `translateX(-${index * 100}%)`;
         };
 
-        // --- Three.js Fluid Simulation (Monotone + Accent) ---
-        let renderer, scene, camera, simMaterial, drawMaterial, targetA, targetB, simScene, drawScene;
+        // --- Three.js Fluid Simulation (Enhanced "Unyo-o" Effect) ---
+        let renderer, scene, camera, simMaterial, targetA, targetB, simScene, drawScene;
 
         function initThreeJS() {
             const container = document.getElementById('canvas-container');
@@ -423,23 +432,34 @@
                 uniform vec2 u_res;
                 uniform vec2 u_mouse;
                 uniform float u_time;
-                uniform vec3 u_color_monotone;
                 uniform vec3 u_color_point;
 
                 void main() {
                     vec2 uv = gl_FragCoord.xy / u_res;
                     float dist = distance(uv, u_mouse);
                     
-                    // マウスに近い場所だけアクセントカラーを混ぜる
-                    float strength = exp(-dist * 18.0);
+                    // ==========================================
+                    // "ウニョー"とした広がりとゆったり感を調整
+                    // ==========================================
+                    // 広がりを大きく(10.0), 影響を強く(0.5)
+                    float strength = exp(-dist * 10.0); 
                     
-                    vec4 prev = texture2D(u_buffer, uv + (strength * 0.005));
+                    // 背景の歪み(ゆったりとした移動)を表現
+                    vec2 distortion = vec2(
+                        sin(uv.y * 5.0 + u_time * 0.5), 
+                        cos(uv.x * 5.0 + u_time * 0.5)
+                    ) * 0.001;
+
+                    vec4 prev = texture2D(u_buffer, uv + distortion + (strength * 0.003));
                     
-                    // 基本はグレー、マウス周辺に微かにポイントカラー
-                    vec3 baseCol = vec3(0.9, 0.9, 0.9); 
-                    vec3 col = mix(baseCol, u_color_point, strength * 0.4);
+                    // 基本の白背景
+                    vec3 baseCol = vec3(0.96, 0.96, 0.96); 
                     
-                    gl_FragColor = vec4(mix(prev.rgb * 0.99, col, strength * 0.3), 1.0);
+                    // アクセントカラーの混ざり方
+                    vec3 col = mix(baseCol, u_color_point, strength * 0.35);
+                    
+                    // 消え方をさらにゆったり(0.995)
+                    gl_FragColor = vec4(mix(prev.rgb * 0.995, col, strength * 0.2), 1.0);
                 }
             `;
 
@@ -465,8 +485,8 @@
                     uniform sampler2D u_tex;
                     void main(){ 
                         vec4 c = texture2D(u_tex, gl_FragCoord.xy / vec2(${window.innerWidth}.0, ${window.innerHeight}.0));
-                        // より白に近い背景にするためのブレンド
-                        gl_FragColor = vec4(mix(vec3(1.0), c.rgb, length(c.rgb) * 0.5), 1.0); 
+                        // 色の明度を調整して目に優しく
+                        gl_FragColor = vec4(mix(vec3(1.0), c.rgb, length(c.rgb) * 0.6), 1.0); 
                     }
                 `
             });
@@ -485,7 +505,7 @@
         function animate() {
             requestAnimationFrame(animate);
             simMaterial.uniforms.u_buffer.value = targetA.texture;
-            simMaterial.uniforms.u_time.value += 0.01;
+            simMaterial.uniforms.u_time.value += 0.005; // 時間の進みを遅くしてゆったりに
             renderer.setRenderTarget(targetB);
             renderer.render(simScene, camera);
             renderer.setRenderTarget(null);
@@ -496,7 +516,6 @@
 
         initThreeJS();
         
-        // Resize
         window.addEventListener('resize', () => {
             renderer.setSize(window.innerWidth, window.innerHeight);
             targetA.setSize(window.innerWidth, window.innerHeight);
