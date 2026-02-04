@@ -14,7 +14,7 @@
     <style>
         :root {
             /* ==========================================
-               DARK CHIC SETTINGS
+               TRUE BLACK CHIC SETTINGS
                ========================================== */
             --primary-color: #ffffff; 
             --text-body: #dddddd;     
@@ -22,22 +22,19 @@
             --accent-main: #ffffff;   
             --accent-sub: #888888;    
             
-            /* アクセントカラー */
+            /* アクセントカラー：マゼンタピンク */
             --point-color: #f46cbc; 
             
+            /* 完全な漆黒 */
             --bg-color: #000000;
-            --glass-bg: rgba(20, 20, 20, 0.85);
+            --card-bg: #000000;
         }
 
-        /* ブラウザのデフォルト背景も黒に固定 */
-        html {
-            background-color: #000000;
-        }
-
-        body {
+        /* ブラウザ全体を漆黒に */
+        html, body {
+            background-color: #000000 !important;
             margin: 0;
             padding: 0;
-            background-color: var(--bg-color);
             font-family: 'Zen Kaku Gothic New', sans-serif;
             color: var(--primary-color);
             overflow: hidden;
@@ -84,7 +81,7 @@
         .loading-bar-container {
             width: 160px;
             height: 1px;
-            background: #222;
+            background: #111;
             overflow: hidden;
         }
         
@@ -113,6 +110,7 @@
             width: 100%;
             opacity: 0;
             transition: opacity 1.5s ease;
+            background: transparent;
         }
         
         .page-container.visible {
@@ -127,7 +125,7 @@
             align-items: center;
             padding: 6rem 2rem;
             box-sizing: border-box;
-            background: transparent; /* 背景は常に透明にしてCanvasを見せる */
+            background: transparent;
         }
 
         .section-title {
@@ -199,24 +197,22 @@
         .hero-desc {
             font-size: 1rem;
             letter-spacing: 0.3em;
-            color: #aaa;
+            color: #888;
             text-transform: uppercase;
         }
 
-        /* Card Styles */
+        /* About Card (Glass -> Solid Black) */
         .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 4px;
+            background: #000000; /* 漆黒に固定 */
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 0px;
             padding: 5rem 4rem;
             width: 100%;
             max-width: 960px;
             display: flex;
             gap: 4rem;
             align-items: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            box-shadow: 0 40px 100px rgba(0,0,0,1);
         }
 
         @media (max-width: 768px) {
@@ -228,16 +224,16 @@
             overflow: hidden;
             aspect-ratio: 1;
             background: #000;
-            border: 1px solid #333;
+            border: 1px solid #222;
         }
         .profile-img { 
             width: 100%; 
             height: 100%; 
             object-fit: cover; 
-            filter: grayscale(100%); 
+            filter: grayscale(100%) brightness(0.8); 
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .profile-img:hover { filter: grayscale(0%); transform: scale(1.05); }
+        .profile-img:hover { filter: grayscale(0%) brightness(1); transform: scale(1.05); }
 
         .profile-text { flex: 1.5; }
         .profile-name { font-family: 'Italiana', serif; font-size: 3.5rem; margin-bottom: 1rem; color: #fff; }
@@ -247,19 +243,18 @@
         .slider-section { 
             padding: 8rem 0; 
             overflow: hidden; 
-            background: transparent; 
         }
         .slider-wrapper { display: flex; transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
         .slide { min-width: 100%; display: flex; justify-content: center; padding: 0 2rem; box-sizing: border-box; }
         
         .work-card {
-            background: #0a0a0a;
+            background: #000000;
             padding: 0;
             max-width: 900px;
             width: 100%;
             display: flex;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,1);
+            border: 1px solid rgba(255,255,255,0.1);
             overflow: hidden;
         }
 
@@ -267,19 +262,20 @@
             flex: 1;
             height: 400px;
             overflow: hidden;
+            background: #000;
         }
         .work-img img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.8);
+            filter: grayscale(100%) brightness(0.6);
             transition: 0.5s;
         }
-        .work-card:hover .work-img img { filter: brightness(1); }
+        .work-card:hover .work-img img { filter: grayscale(0%) brightness(1); }
 
         .work-info {
             flex: 1;
-            padding: 3rem;
+            padding: 3.5rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -291,25 +287,25 @@
         }
 
         .work-info h3 { font-size: 1.6rem; margin-bottom: 1.5rem; color: #fff; font-family: 'Playfair Display', serif; line-height: 1.4; }
-        .work-info p { color: #ccc; font-size: 0.95rem; white-space: pre-line; margin: 0; }
+        .work-info p { color: #888; font-size: 0.95rem; white-space: pre-line; margin: 0; }
 
         .slider-controls { display: flex; justify-content: center; gap: 4rem; margin-top: 4rem; }
         .nav-btn {
             width: 40px; height: 40px;
             display: flex; align-items: center; justify-content: center; cursor: pointer;
             transition: all 0.3s; background: transparent; font-family: 'Italiana', serif;
-            font-size: 1.5rem; color: var(--accent-sub); border: none;
+            font-size: 1.5rem; color: #444; border: none;
         }
         .nav-btn:hover { color: var(--point-color); transform: scale(1.2); }
 
         /* Contact Form */
         .contact-form-wrapper {
-            background: #0a0a0a;
+            background: #000000;
             padding: 4rem;
             width: 100%;
             max-width: 600px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 40px 100px rgba(0,0,0,1);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .form-control {
@@ -330,11 +326,14 @@
         }
         .submit-btn:hover { background: var(--point-color); color: #fff; }
 
-        footer { padding: 6rem 4rem; text-align: center; font-family: 'Italiana', serif; color: #333; letter-spacing: 0.1em; }
+        footer { padding: 6rem 4rem; text-align: center; font-family: 'Italiana', serif; color: #222; letter-spacing: 0.1em; }
+
+        /* スクロールバーの非表示（シックにするため） */
+        ::-webkit-scrollbar { width: 0px; }
 
     </style>
 </head>
-<body>
+<body class="bg-black">
 
     <div id="loading-screen">
         <div class="loading-logo">Nico</div>
@@ -362,7 +361,8 @@
             <h2 class="section-title">About Me</h2>
             <div class="glass-card">
                 <div class="profile-img-wrapper">
-                    <img src="1.jpg" alt="Nico Profile" class="profile-img" onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=\'width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#444;\'>1.jpg</div>'">
+                    <!-- 1.jpg を適用 -->
+                    <img src="1.jpg" alt="Nico Profile" class="profile-img" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800';">
                 </div>
                 <div class="profile-text">
                     <h3 class="profile-name">Nico</h3>
@@ -378,11 +378,11 @@
         <section id="works" class="slider-section">
             <h2 class="section-title">My Favorites</h2>
             <div class="slider-wrapper" id="sliderWrapper">
-                <!-- Slide 1 -->
+                <!-- Slide 1: 2.jpg -->
                 <div class="slide">
                     <div class="work-card">
                         <div class="work-img">
-                            <img src="2.jpg" alt="Favorite 01" onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=\'width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#444;\'>2.jpg</div>'">
+                            <img src="2.jpg" alt="Favorite 01" onerror="this.src='https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800';">
                         </div>
                         <div class="work-info">
                             <h3>01. AIが楽しすぎて時間が溶ける！</h3>
@@ -393,30 +393,30 @@
                         </div>
                     </div>
                 </div>
-                <!-- Slide 2 -->
+                <!-- Slide 2: 3.jpg -->
                 <div class="slide">
                     <div class="work-card">
                         <div class="work-img">
-                            <img src="3.jpg" alt="Favorite 02" onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=\'width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#444;\'>3.jpg</div>'">
+                            <img src="3.jpg" alt="Favorite 02" onerror="this.src='https://images.unsplash.com/photo-1620712943543-bcc4638d9f80?auto=format&fit=crop&w=800';">
                         </div>
                         <div class="work-info">
                             <h3>02. 推しのセミナー参加</h3>
-                            <p>AI界隈のセミナーに参加するのが大好き
-いつもどこかのセミナーに神出鬼没</p>
+                            <p>AI界隈のセミナーに参加するのが大好き。
+いつもどこかのセミナーに神出鬼没です。</p>
                         </div>
                     </div>
                 </div>
-                <!-- Slide 3 -->
+                <!-- Slide 3: 4.jpg -->
                 <div class="slide">
                     <div class="work-card">
                         <div class="work-img">
-                            <img src="4.jpg" alt="Favorite 03" onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=\'width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#444;\'>4.jpg</div>'">
+                            <img src="4.jpg" alt="Favorite 03" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800';">
                         </div>
                         <div class="work-info">
                             <h3>03. もっと色々出来るようになりたい！</h3>
                             <p>これから試したいこと
 ・OpenClaw
-・AGI</p>
+・AGIへの道</p>
                         </div>
                     </div>
                 </div>
@@ -463,12 +463,13 @@
             wrapper.style.transform = `translateX(-${index * 100}%)`;
         };
 
-        // --- Three.js Fluid Simulation (Dark Mode Enhanced) ---
+        // --- Three.js Background Animation (Dark Fluid) ---
         let renderer, scene, camera, simMaterial, targetA, targetB, simScene, drawScene;
 
         function initThreeJS() {
             const container = document.getElementById('canvas-container');
             renderer = new THREE.WebGLRenderer({ antialias: false });
+            renderer.setPixelRatio(1);
             renderer.setSize(window.innerWidth, window.innerHeight);
             container.appendChild(renderer.domElement);
 
@@ -489,20 +490,17 @@
                 void main() {
                     vec2 uv = gl_FragCoord.xy / u_res;
                     float dist = distance(uv, u_mouse);
-                    
-                    float strength = exp(-dist * 12.0); 
+                    float strength = exp(-dist * 15.0); 
                     
                     vec2 distortion = vec2(
-                        sin(uv.y * 6.0 + u_time * 0.4), 
-                        cos(uv.x * 6.0 + u_time * 0.4)
-                    ) * 0.0008;
+                        sin(uv.y * 5.0 + u_time * 0.5), 
+                        cos(uv.x * 5.0 + u_time * 0.5)
+                    ) * 0.001;
 
-                    vec4 prev = texture2D(u_buffer, uv + distortion + (strength * 0.002));
+                    vec4 prev = texture2D(u_buffer, uv + distortion);
                     
-                    vec3 baseCol = vec3(0.0, 0.0, 0.0); 
-                    vec3 col = mix(baseCol, u_color_point, strength * 0.7);
-                    
-                    gl_FragColor = vec4(mix(prev.rgb * 0.994, col, strength * 0.2), 1.0);
+                    vec3 col = mix(vec3(0.0), u_color_point, strength * 0.6);
+                    gl_FragColor = vec4(mix(prev.rgb * 0.992, col, strength * 0.15), 1.0);
                 }
             `;
 
@@ -528,7 +526,7 @@
                     uniform sampler2D u_tex;
                     void main(){ 
                         vec4 c = texture2D(u_tex, gl_FragCoord.xy / vec2(${window.innerWidth}.0, ${window.innerHeight}.0));
-                        gl_FragColor = vec4(c.rgb * 1.6, 1.0); 
+                        gl_FragColor = vec4(c.rgb * 1.8, 1.0); 
                     }
                 `
             });
@@ -547,7 +545,7 @@
         function animate() {
             requestAnimationFrame(animate);
             simMaterial.uniforms.u_buffer.value = targetA.texture;
-            simMaterial.uniforms.u_time.value += 0.005;
+            simMaterial.uniforms.u_time.value += 0.01;
             renderer.setRenderTarget(targetB);
             renderer.render(simScene, camera);
             renderer.setRenderTarget(null);
