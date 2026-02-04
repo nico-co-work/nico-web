@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROFILE - Nico</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        :root {
+            /* ==========================================
+               CHIC MONOTONE SETTINGS
+               ========================================== */
+            --primary-color: #1a1a1a; 
+            --text-body: #333333;     
+            
+            /* モノトーン基調 */
+            --accent-main: #000000;   
+            --accent-sub: #666666;    
+            
+            /* ご指定のアクセントカラー: 少量使い */
+            --point-color: #f46cbc; 
+            
+            --bg-color: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            color: var(--primary-color);
+            overflow: hidden;
+            height: 100vh;
+            line-height: 1.8;
+        }
+
+        body.loaded {
+            overflow-y: auto; 
+            height: auto;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: #111;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loading-logo {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 3rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .loading-bar-container {
+            width: 160px;
+            height: 1px;
+            background: #333;
+            overflow: hidden;
+        }
+        
+        .loading-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--point-color);
+            transition: width 0.1s linear;
+        }
+
+        /* Background Canvas */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Layout */
+        .page-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+        
+        .page-container.visible {
+            opacity: 1;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 6rem 2rem;
+            box-sizing: border-box;
+        }
+
+        .section-title {
+            font-family: 'Italiana', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 4rem;
+            color: var(--accent-main);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 1px;
+            background: var(--point-color);
+        }
+        
+        nav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            padding: 2.5rem;
+            z-index: 100;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-family: 'Italiana', serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+        }
+        .nav-item:hover { color: var(--point-color); }
+
+        /* Hero */
+        .hero-section {
+            height: 100vh;
+            text-align: center;
+        }
+
+        .hero-logo {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--point-color);
+            margin-bottom: 1.5rem;
+            display: block;
+            letter-spacing: 0.2em;
+        }
+
+        .hero-title {
+            font-family: 'Italiana', serif;
+            font-size: clamp(4.5rem, 12vw, 9rem);
+            line-height: 0.9;
+            margin-bottom: 2.5rem;
+            color: var(--accent-main);
+            font-weight: 400;
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            letter-spacing: 0.3em;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        /* Card Styles */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 4px; /* シックにするため角丸を抑える */
+            padding: 5rem 4rem;
+            width: 100%;
+            max-width: 960px;
+            display: flex;
+            gap: 4rem;
+            align-items: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+        }
+
+        @media (max-width: 768px) {
+            .glass-card { flex-direction: column; text-align: center; padding: 3rem 2rem; }
+        }
+
+        .profile-img-wrapper {
+            flex: 1;
+            overflow: hidden;
+            aspect-ratio: 1;
+            background: #f7f7f7;
+            border: 1px solid #eee;
+        }
+        .profile-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: filter 0.5s; }
+        .profile-img:hover { filter: grayscale(0%); }
+
+        .profile-text { flex: 1.5; }
+        .profile-name { font-family: 'Italiana', serif; font-size: 3.5rem; margin-bottom: 1rem; }
+        .profile-role { color: var(--point-color); font-weight: 600; margin-bottom: 1.5rem; display: block; letter-spacing: 0.1em; }
+
+        /* Slider */
+        .slider-section { padding: 8rem 0; overflow: hidden; background: #fafafa; }
+        .slider-wrapper { display: flex; transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
+        .slide { min-width: 100%; display: flex; justify-content: center; padding: 0 2rem; box-sizing: border-box; }
+        
+        .work-card {
+            background: #fff;
+            padding: 4rem;
+            max-width: 840px;
+            width: 100%;
+            display: flex;
+            gap: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+            border-left: 2px solid var(--accent-main);
+        }
+
+        @media (max-width: 600px) { .work-card { flex-direction: column; padding: 2.5rem; } }
+
+        .work-info h3 { font-size: 2rem; margin-bottom: 1.5rem; color: var(--accent-main); font-family: 'Playfair Display', serif; }
+        .work-info p { color: #555; font-size: 1.05rem; }
+
+        .slider-controls { display: flex; justify-content: center; gap: 4rem; margin-top: 4rem; }
+        .nav-btn {
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            transition: all 0.3s; background: transparent; font-family: 'Italiana', serif;
+            font-size: 1.5rem; color: var(--accent-sub); border: none;
+        }
+        .nav-btn:hover { color: var(--point-color); transform: scale(1.2); }
+
+        /* Contact Form */
+        .contact-form-wrapper {
+            background: #fff;
+            padding: 4rem;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--accent-main);
+        }
+
+        .form-control {
+            width: 100%; padding: 1.2rem; margin-bottom: 2rem;
+            border: none; border-bottom: 1px solid #ddd;
+            font-family: inherit; font-size: 1rem; outline: none; transition: border-color 0.3s;
+        }
+        .form-control:focus { border-bottom-color: var(--point-color); }
+
+        .submit-btn {
+            width: 100%; padding: 1.2rem; border: none;
+            background: var(--accent-main);
+            color: #fff; font-family: 'Italiana', serif; font-size: 1.2rem;
+            cursor: pointer; transition: all 0.4s; letter-spacing: 0.2em;
+        }
+        .submit-btn:hover { background: var(--point-color); }
+
+        footer { padding: 6rem 4rem; text-align: center; font-family: 'Italiana', serif; color: #bbb; letter-spacing: 0.1em; }
+
+    </style>
+</head>
+<body>
+
+    <div id="loading-screen">
+        <div class="loading-logo">Nico</div>
+        <div class="loading-bar-container"><div class="loading-bar" id="loading-bar"></div></div>
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <div class="page-container">
+        <nav>
+            <a href="#about" class="nav-item">About</a>
+            <a href="#works" class="nav-item">Favorites</a>
+            <a href="#contact" class="nav-item">Contact</a>
+        </nav>
+
+        <section class="hero-section">
+            <div class="hero-content">
+                <span class="hero-logo">PORTFOLIO</span>
+                <h1 class="hero-title">Nico</h1>
+                <p class="hero-desc">AI Enthusiast / Creative Life</p>
+            </div>
+        </section>
+
+        <section id="about">
+            <h2 class="section-title">About Me</h2>
+            <div class="glass-card">
+                <div class="profile-img-wrapper">
+                    <!-- 代替画像用プレースホルダー -->
+                    <div style="width:100%; height:100%; background: #f0f0f0; display:flex; align-items:center; justify-content:center; color:#999; font-style:italic;">Nico Profile</div>
+                </div>
+                <div class="profile-text">
+                    <h3 class="profile-name">Nico</h3>
+                    <span class="profile-role">AIに恋する主婦</span>
+                    <p class="profile-desc">
+                        3度の飯よりAIが好き。<br>
+                  
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="works" class="slider-section">
+            <h2 class="section-title">My Favorites</h2>
+            <div class="slider-wrapper" id="sliderWrapper">
+                <div class="slide">
+                    <div class="work-card">
+                        <div class="work-info">
+                            <h3>01. AI Tooling</h3>
+                            <p>Cursor / Claude Code / Remotion<br>日常をコードで彩り、時間が溶けるほど没頭できる最高のパートナーたち。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="work-card">
+                        <div class="work-info">
+                            <h3>02. Seminars</h3>
+                            <p>AI界隈の最前線へ。セミナーで見かける、神出鬼没な私の推し活動の記録。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="work-card">
+                        <div class="work-info">
+                            <h3>03. Next Step</h3>
+                            <p>OpenClaw / AGI.<br>未知の領域へ踏み込む、これからの挑戦リスト。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-controls">
+                <div class="nav-btn" id="prevBtn">PREV</div>
+                <div class="nav-btn" id="nextBtn">NEXT</div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2 class="section-title">Contact</h2>
+            <div class="contact-form-wrapper">
+                <input type="text" placeholder="Your Name" class="form-control">
+                <input type="email" placeholder="Email Address" class="form-control">
+                <textarea placeholder="Message" class="form-control" rows="3"></textarea>
+                <button class="submit-btn">SEND MESSAGE</button>
+            </div>
+            <footer>&copy; 2026 Nico — Digital Identity</footer>
+        </section>
+    </div>
+
+    <script>
+        // --- Loading ---
+        window.addEventListener('load', () => {
+            const bar = document.getElementById('loading-bar');
+            bar.style.width = "100%";
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+                document.querySelector('.page-container').classList.add('visible');
+                document.body.classList.add('loaded');
+            }, 800);
+        });
+
+        // --- Slider ---
+        const wrapper = document.getElementById('sliderWrapper');
+        let index = 0;
+        document.getElementById('nextBtn').onclick = () => {
+            index = (index + 1) % 3;
+            wrapper.style.transform = `translateX(-${index * 100}%)`;
+        };
+        document.getElementById('prevBtn').onclick = () => {
+            index = (index - 1 + 3) % 3;
+            wrapper.style.transform = `translateX(-${index * 100}%)`;
+        };
+
+        // --- Three.js Fluid Simulation (Monotone + Accent) ---
+        let renderer, scene, camera, simMaterial, drawMaterial, targetA, targetB, simScene, drawScene;
+
+        function initThreeJS() {
+            const container = document.getElementById('canvas-container');
+            renderer = new THREE.WebGLRenderer({ antialias: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            scene = new THREE.Scene();
+            camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+            const size = new THREE.Vector2(window.innerWidth, window.innerHeight);
+            targetA = new THREE.WebGLRenderTarget(size.x, size.y, { type: THREE.FloatType });
+            targetB = targetA.clone();
+
+            const simFrag = `
+                uniform sampler2D u_buffer;
+                uniform vec2 u_res;
+                uniform vec2 u_mouse;
+                uniform float u_time;
+                uniform vec3 u_color_monotone;
+                uniform vec3 u_color_point;
+
+                void main() {
+                    vec2 uv = gl_FragCoord.xy / u_res;
+                    float dist = distance(uv, u_mouse);
+                    
+                    // マウスに近い場所だけアクセントカラーを混ぜる
+                    float strength = exp(-dist * 18.0);
+                    
+                    vec4 prev = texture2D(u_buffer, uv + (strength * 0.005));
+                    
+                    // 基本はグレー、マウス周辺に微かにポイントカラー
+                    vec3 baseCol = vec3(0.9, 0.9, 0.9); 
+                    vec3 col = mix(baseCol, u_color_point, strength * 0.4);
+                    
+                    gl_FragColor = vec4(mix(prev.rgb * 0.99, col, strength * 0.3), 1.0);
+                }
+            `;
+
+            const style = getComputedStyle(document.documentElement);
+            const pointCol = new THREE.Color(style.getPropertyValue('--point-color').trim());
+
+            simMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    u_buffer: { value: null },
+                    u_res: { value: size },
+                    u_mouse: { value: new THREE.Vector2(-1, -1) },
+                    u_time: { value: 0 },
+                    u_color_point: { value: pointCol }
+                },
+                vertexShader: `void main(){ gl_Position = vec4(position, 1.0); }`,
+                fragmentShader: simFrag
+            });
+
+            const drawMaterial = new THREE.ShaderMaterial({
+                uniforms: { u_tex: { value: null } },
+                vertexShader: `void main(){ gl_Position = vec4(position, 1.0); }`,
+                fragmentShader: `
+                    uniform sampler2D u_tex;
+                    void main(){ 
+                        vec4 c = texture2D(u_tex, gl_FragCoord.xy / vec2(${window.innerWidth}.0, ${window.innerHeight}.0));
+                        // より白に近い背景にするためのブレンド
+                        gl_FragColor = vec4(mix(vec3(1.0), c.rgb, length(c.rgb) * 0.5), 1.0); 
+                    }
+                `
+            });
+
+            const quad = new THREE.PlaneGeometry(2, 2);
+            simScene = new THREE.Scene(); simScene.add(new THREE.Mesh(quad, simMaterial));
+            drawScene = new THREE.Scene(); drawScene.add(new THREE.Mesh(quad, drawMaterial));
+
+            animate();
+        }
+
+        window.onmousemove = (e) => {
+            if(simMaterial) simMaterial.uniforms.u_mouse.value.set(e.clientX/window.innerWidth, 1 - e.clientY/window.innerHeight);
+        };
+
+        function animate() {
+            requestAnimationFrame(animate);
+            simMaterial.uniforms.u_buffer.value = targetA.texture;
+            simMaterial.uniforms.u_time.value += 0.01;
+            renderer.setRenderTarget(targetB);
+            renderer.render(simScene, camera);
+            renderer.setRenderTarget(null);
+            drawScene.children[0].material.uniforms.u_tex.value = targetB.texture;
+            renderer.render(drawScene, camera);
+            [targetA, targetB] = [targetB, targetA];
+        }
+
+        initThreeJS();
+        
+        // Resize
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            targetA.setSize(window.innerWidth, window.innerHeight);
+            targetB.setSize(window.innerWidth, window.innerHeight);
+            simMaterial.uniforms.u_res.value.set(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
