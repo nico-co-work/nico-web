@@ -14,20 +14,20 @@
     <style>
         :root {
             /* ==========================================
-               CHIC MONOTONE SETTINGS
+               DARK CHIC SETTINGS
                ========================================== */
-            --primary-color: #1a1a1a; 
-            --text-body: #333333;     
+            --primary-color: #ffffff; /* 文字は白 */
+            --text-body: #dddddd;     
             
-            /* モノトーン基調 */
-            --accent-main: #000000;   
-            --accent-sub: #666666;    
+            /* ダーク基調 */
+            --accent-main: #ffffff;   
+            --accent-sub: #888888;    
             
-            /* ご指定のアクセントカラー: 少量使い */
+            /* アクセントカラー */
             --point-color: #f46cbc; 
             
-            --bg-color: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.8);
+            --bg-color: #000000;
+            --glass-bg: rgba(25, 25, 25, 0.7);
         }
 
         body {
@@ -54,7 +54,7 @@
             width: 100%;
             height: 100%;
             z-index: 9999;
-            background: #111;
+            background: #000;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -80,7 +80,7 @@
         .loading-bar-container {
             width: 160px;
             height: 1px;
-            background: #333;
+            background: #222;
             overflow: hidden;
         }
         
@@ -193,7 +193,7 @@
         .hero-desc {
             font-size: 1rem;
             letter-spacing: 0.3em;
-            color: #666;
+            color: #aaa;
             text-transform: uppercase;
         }
 
@@ -202,7 +202,7 @@
             background: var(--glass-bg);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 4px;
             padding: 5rem 4rem;
             width: 100%;
@@ -210,7 +210,7 @@
             display: flex;
             gap: 4rem;
             align-items: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
 
         @media (max-width: 768px) {
@@ -221,37 +221,38 @@
             flex: 1;
             overflow: hidden;
             aspect-ratio: 1;
-            background: #f7f7f7;
-            border: 1px solid #eee;
+            background: #1a1a1a;
+            border: 1px solid #333;
         }
         .profile-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: filter 0.5s; }
         .profile-img:hover { filter: grayscale(0%); }
 
         .profile-text { flex: 1.5; }
-        .profile-name { font-family: 'Italiana', serif; font-size: 3.5rem; margin-bottom: 1rem; }
+        .profile-name { font-family: 'Italiana', serif; font-size: 3.5rem; margin-bottom: 1rem; color: #fff; }
         .profile-role { color: var(--point-color); font-weight: 600; margin-bottom: 1.5rem; display: block; letter-spacing: 0.1em; }
 
         /* Slider */
-        .slider-section { padding: 8rem 0; overflow: hidden; background: #fafafa; }
+        .slider-section { padding: 8rem 0; overflow: hidden; background: #050505; }
         .slider-wrapper { display: flex; transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
         .slide { min-width: 100%; display: flex; justify-content: center; padding: 0 2rem; box-sizing: border-box; }
         
         .work-card {
-            background: #fff;
+            background: #111;
             padding: 4rem;
             max-width: 840px;
             width: 100%;
             display: flex;
             gap: 3rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
             border-left: 2px solid var(--accent-main);
             text-align: left;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         @media (max-width: 600px) { .work-card { flex-direction: column; padding: 2.5rem; } }
 
-        .work-info h3 { font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--accent-main); font-family: 'Playfair Display', serif; line-height: 1.4; }
-        .work-info p { color: #555; font-size: 1.05rem; white-space: pre-line; }
+        .work-info h3 { font-size: 1.8rem; margin-bottom: 1.5rem; color: #fff; font-family: 'Playfair Display', serif; line-height: 1.4; }
+        .work-info p { color: #ccc; font-size: 1.05rem; white-space: pre-line; }
 
         .slider-controls { display: flex; justify-content: center; gap: 4rem; margin-top: 4rem; }
         .nav-btn {
@@ -264,17 +265,20 @@
 
         /* Contact Form */
         .contact-form-wrapper {
-            background: #fff;
+            background: #111;
             padding: 4rem;
             width: 100%;
             max-width: 600px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             border-top: 4px solid var(--accent-main);
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         .form-control {
             width: 100%; padding: 1.2rem; margin-bottom: 2rem;
-            border: none; border-bottom: 1px solid #ddd;
+            border: none; border-bottom: 1px solid #333;
+            background: transparent;
+            color: #fff;
             font-family: inherit; font-size: 1rem; outline: none; transition: border-color 0.3s;
         }
         .form-control:focus { border-bottom-color: var(--point-color); }
@@ -282,12 +286,13 @@
         .submit-btn {
             width: 100%; padding: 1.2rem; border: none;
             background: var(--accent-main);
-            color: #fff; font-family: 'Italiana', serif; font-size: 1.2rem;
+            color: #000; font-family: 'Italiana', serif; font-size: 1.2rem;
             cursor: pointer; transition: all 0.4s; letter-spacing: 0.2em;
+            font-weight: bold;
         }
-        .submit-btn:hover { background: var(--point-color); }
+        .submit-btn:hover { background: var(--point-color); color: #fff; }
 
-        footer { padding: 6rem 4rem; text-align: center; font-family: 'Italiana', serif; color: #bbb; letter-spacing: 0.1em; }
+        footer { padding: 6rem 4rem; text-align: center; font-family: 'Italiana', serif; color: #444; letter-spacing: 0.1em; }
 
     </style>
 </head>
@@ -319,7 +324,7 @@
             <h2 class="section-title">About Me</h2>
             <div class="glass-card">
                 <div class="profile-img-wrapper">
-                    <div style="width:100%; height:100%; background: #f0f0f0; display:flex; align-items:center; justify-content:center; color:#999; font-style:italic;">Nico Profile</div>
+                    <div style="width:100%; height:100%; background: #111; display:flex; align-items:center; justify-content:center; color:#444; font-style:italic;">Nico Profile</div>
                 </div>
                 <div class="profile-text">
                     <h3 class="profile-name">Nico</h3>
@@ -411,7 +416,7 @@
             wrapper.style.transform = `translateX(-${index * 100}%)`;
         };
 
-        // --- Three.js Fluid Simulation (Enhanced "Unyo-o" Effect) ---
+        // --- Three.js Fluid Simulation (Dark Mode Enhanced) ---
         let renderer, scene, camera, simMaterial, targetA, targetB, simScene, drawScene;
 
         function initThreeJS() {
@@ -438,13 +443,9 @@
                     vec2 uv = gl_FragCoord.xy / u_res;
                     float dist = distance(uv, u_mouse);
                     
-                    // ==========================================
-                    // "ウニョー"とした広がりとゆったり感を調整
-                    // ==========================================
                     // 広がりを大きく(10.0), 影響を強く(0.5)
                     float strength = exp(-dist * 10.0); 
                     
-                    // 背景の歪み(ゆったりとした移動)を表現
                     vec2 distortion = vec2(
                         sin(uv.y * 5.0 + u_time * 0.5), 
                         cos(uv.x * 5.0 + u_time * 0.5)
@@ -452,14 +453,14 @@
 
                     vec4 prev = texture2D(u_buffer, uv + distortion + (strength * 0.003));
                     
-                    // 基本の白背景
-                    vec3 baseCol = vec3(0.96, 0.96, 0.96); 
+                    // 背景を漆黒に
+                    vec3 baseCol = vec3(0.0, 0.0, 0.0); 
                     
-                    // アクセントカラーの混ざり方
-                    vec3 col = mix(baseCol, u_color_point, strength * 0.35);
+                    // アクセントカラーが暗闇で光るように調整
+                    vec3 col = mix(baseCol, u_color_point, strength * 0.6);
                     
-                    // 消え方をさらにゆったり(0.995)
-                    gl_FragColor = vec4(mix(prev.rgb * 0.995, col, strength * 0.2), 1.0);
+                    // 残像をゆったり残す
+                    gl_FragColor = vec4(mix(prev.rgb * 0.992, col, strength * 0.25), 1.0);
                 }
             `;
 
@@ -485,8 +486,8 @@
                     uniform sampler2D u_tex;
                     void main(){ 
                         vec4 c = texture2D(u_tex, gl_FragCoord.xy / vec2(${window.innerWidth}.0, ${window.innerHeight}.0));
-                        // 色の明度を調整して目に優しく
-                        gl_FragColor = vec4(mix(vec3(1.0), c.rgb, length(c.rgb) * 0.6), 1.0); 
+                        // ダークモード用に色の出方を調整（加算っぽく光らせる）
+                        gl_FragColor = vec4(c.rgb * 1.5, 1.0); 
                     }
                 `
             });
@@ -505,7 +506,7 @@
         function animate() {
             requestAnimationFrame(animate);
             simMaterial.uniforms.u_buffer.value = targetA.texture;
-            simMaterial.uniforms.u_time.value += 0.005; // 時間の進みを遅くしてゆったりに
+            simMaterial.uniforms.u_time.value += 0.005;
             renderer.setRenderTarget(targetB);
             renderer.render(simScene, camera);
             renderer.setRenderTarget(null);
